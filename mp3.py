@@ -25,19 +25,12 @@ def change_cover_image(input_mp3, input_image):
 def get_track_duration(file): # note: this function is not optimized and crashes on large files
     audio_file = AudioSegment.from_file(file)
     duration_in_ms = len(audio_file)
-    duration_in_sec = int(duration_in_ms / 1000)
-    return duration_in_sec
+    return duration_in_ms // 1000
 
 def get_artist_name_from_track(file):
     audio = MP3(file)
-    artist = audio["TPE1"].text[0]
-    return artist
+    return audio["TPE1"].text[0]
 
 def get_track_title(file):
     audio = MP3(file)
-    title = audio.get("TIT2")
-    if title:
-        track_title = title.text[0]
-        return track_title
-    else:
-        return "No Track Name Error"
+    return title.text[0] if (title := audio.get("TIT2")) else "No Track Name Error"

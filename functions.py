@@ -6,28 +6,21 @@ import requests
 
 def download(track_link):
     # download track
-    print("start downloading: " + track_link)
+    print(f"start downloading: {track_link}")
     normal_download_command = ['../spotdl', "--bitrate", "320k", track_link] # nomal download
     warp_download_command = ['proxychains', '-f', '../proxychains.conf', '../spotdl', "--bitrate", "320k", track_link] # download with warp
-    if warp_mode:
-        command = warp_download_command # download with proxychains and warp from port 40000
-    else:
-        command = normal_download_command # normal download
+    command = warp_download_command if warp_mode else normal_download_command
     subprocess.run(command, cwd=directory, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    print("end downloading: " + track_link)
+    print(f"end downloading: {track_link}")
 
     # download cover image
     image_url = get_track_image(track_link)
-    print("start downloading cover image: " + image_url)
+    print(f"start downloading cover image: {image_url}")
     subprocess.run(f"wget -O cover.jpg -o /dev/null \"{image_url}\"", shell=True, cwd=directory)
-    print("end downloading cover image: " + image_url)
+    print(f"end downloading cover image: {image_url}")
 
 def file_list(directory):
-    file_list = []
-    for file in os.listdir(directory):
-        if file.endswith(".mp3"):
-            file_list.append(file)
-    return file_list
+    return [file for file in os.listdir(directory) if file.endswith(".mp3")]
 
 def clear_files(folder_path):
     directory = folder_path
@@ -51,7 +44,7 @@ def check_membership(channel, user):
     data = response.json()
     if data['ok']:
         member_status = data['result']['status']
-        if member_status == 'member' or member_status == 'creator' or member_status == 'administrator':
+        if member_status in ['member', 'creator', 'administrator']:
             print('The user is a member of the channel.')
             return True
         else:

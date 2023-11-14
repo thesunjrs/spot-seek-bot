@@ -74,10 +74,8 @@ def get_track_image(track_link):
     #Authentication - without user
     client_credentials_manager = SpotifyClientCredentials(client_id=spotify_client_id, client_secret=spotify_client_secret)
     sp = spotipy.Spotify(client_credentials_manager = client_credentials_manager)
-    
+
     track_id = track_link.split("/")[-1].split("?")[0]
     track = sp.track(track_id)
-    cover_image_url = track['album']['images'][0]['url']
-    
-    return cover_image_url
+    return track['album']['images'][0]['url']
 

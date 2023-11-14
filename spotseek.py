@@ -91,7 +91,7 @@ def handle_correct_spotify_link(message):
                         log(bot_name + " log:\nerror in handling short link") # TO-DO: doesn't run, fix later
                         return
 
-                
+
                 matches = get_track_ids(first_link)
                 if len(matches) > 1000:
                     bot.send_message(message.chat.id, "Bot can't download playlists more than 1000 tracks at the moment. This feature will be added later.")
@@ -103,9 +103,10 @@ def handle_correct_spotify_link(message):
                     for track_id in matches:
                         time.sleep(0.5) # wait a little to alleviate telegram bot limit
                         # (https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this)
-                        link = "https://open.spotify.com/track/" + track_id 
-                        existed_row = get_row_list_csv_search(db_csv_path, db_sp_track_column, track_id)
-                        if existed_row:
+                        link = f"https://open.spotify.com/track/{track_id}"
+                        if existed_row := get_row_list_csv_search(
+                            db_csv_path, db_sp_track_column, track_id
+                        ):
                             telegram_audio_id = existed_row[db_tl_audio_column]
                             bot.send_audio(message.chat.id, telegram_audio_id, caption=bot_username)
                             at_least_one_track_downloaded = True
@@ -125,7 +126,7 @@ def handle_correct_spotify_link(message):
                                     track_duration = get_track_duration(directory + file)
                                     track_artist = get_artist_name_from_track(directory + file)
                                     track_title = get_track_title(directory + file)
-                                    thumb_image = open(directory + "cover_low.jpg", 'rb')
+                                    thumb_image = open(f"{directory}cover_low.jpg", 'rb')
                                     # first send to database_channel:
                                     audio_message = bot.send_audio(database_channel, \
                                             audio, thumb=thumb_image, \
@@ -155,7 +156,10 @@ def handle_correct_spotify_link(message):
                                      becuase it is already checked with regex, if happens is a bug.")
                     bot.send_message(message.chat.id, unsuccessful_process_message, parse_mode="Markdown")
             else:
-                bot.send_message(message.chat.id, "you should wait " + str(user_request_wait) + " seconds between requests")
+                bot.send_message(
+                    message.chat.id,
+                    f"you should wait {str(user_request_wait)} seconds between requests",
+                )
                 log(bot_name + " log:\n⏰user " + str(message.chat.id) + " isn't allowed to use the bot")
     except Exception as e:
         log(bot_name + " log:\nAn error occurred: " + str(e))

@@ -26,20 +26,21 @@ def get_row_list_csv_search(csv_path, column, value):
     # Reading from a CSV file
     with open(csv_path, mode='r') as file:
         reader = csv.reader(file)
-        for row in reader:
-            if row[column] == value:
-                return row
-        return False
+        return next((row for row in reader if row[column] == value), False)
 
 def get_row_index_csv_search(csv_path, column, value):
     value = str(value) # value should be converted to string to prevent variable type bug
     # Reading from a CSV file
     with open(csv_path, mode='r') as file:
         reader = csv.reader(file)
-        for index, row in enumerate(reader):
-            if row[column] == value:
-                return index
-        return False
+        return next(
+            (
+                index
+                for index, row in enumerate(reader)
+                if row[column] == value
+            ),
+            False,
+        )
 
 def edit_csv(csv_path, row_index, column_index, new_value):
     # convert variables types
@@ -102,14 +103,14 @@ def allow_user(telegram_user_id):
         time_difference = int(time_difference.total_seconds())
         print("user", telegram_user_id, "last use was", time_difference, "seconds ago.")
         if time_difference > user_request_wait:
-            print("user " + telegram_user_id + " is allowed to use bot.")
+            print(f"user {telegram_user_id} is allowed to use bot.")
             edit_csv(users_csv_path, row_index, ucsv_last_time_column, formatted_date)
             return True
         else:
-            print("user " + telegram_user_id + " is not allowed to use bot.")
+            print(f"user {telegram_user_id} is not allowed to use bot.")
             return False
     else:
-        users_csv_append(users_csv_path, str(telegram_user_id))
-        print("user " + telegram_user_id + " added to users.csv")
+        users_csv_append(users_csv_path, telegram_user_id)
+        print(f"user {telegram_user_id} added to users.csv")
         return True
 

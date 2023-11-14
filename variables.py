@@ -83,7 +83,7 @@ spotify_shortened_link_pattern = r'https:\/\/spotify\.link\/[A-Za-z0-9]+'
 spotify_track_link_pattern = r'https:\/\/open\.spotify\.com\/(intl-[a-zA-Z]{2}\/)?track\/[a-zA-Z0-9]+'
 spotify_album_link_pattern = r'https:\/\/open\.spotify\.com\/(intl-[a-zA-Z]{2}\/)?album\/[a-zA-Z0-9]+'
 spotify_playlist_link_pattern = r'https:\/\/open\.spotify\.com\/(intl-[a-zA-Z]{2}\/)?playlist\/[a-zA-Z0-9]+'
-spotify_correct_link_pattern = spotify_track_link_pattern + "|" + spotify_album_link_pattern + "|" + spotify_playlist_link_pattern + "|" + spotify_shortened_link_pattern
+spotify_correct_link_pattern = f"{spotify_track_link_pattern}|{spotify_album_link_pattern}|{spotify_playlist_link_pattern}|{spotify_shortened_link_pattern}"
 #spotify_track_id_pattern = r"spotify\.com\/track\/(\w+)(?:\?.*)?$"
 #spotify_album_id_pattern = r"spotify\.com\/album\/(\w+)(?:\?.*)?$"
 #spotify_playlist_id_pattern = r"spotify\.com\/playlist\/(\w+)(?:\?.*)?$"
@@ -92,7 +92,7 @@ soundcloud_link_pattern = r"(?:https?://)?(?:www\.)?soundcloud\.com/([a-zA-Z0-9-
 youtube_link_pattern = r"(?:(?:https?:)?//)?(?:www\.)?(?:(?:youtube\.com/(?:watch\?.*v=|embed/|v/)|youtu.be/))([\w-]{11})"
 
 # log chanel
-log_bot_url = "https://api.telegram.org/bot" + bot_api + "/"
+log_bot_url = f"https://api.telegram.org/bot{bot_api}/"
 log_channel_id = os.environ['LOG_CHANNEL_ID']
 
 # specify to use warp or not
